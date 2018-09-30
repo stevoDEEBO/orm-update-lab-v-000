@@ -7,7 +7,7 @@ class Student
   attr_accessor :name, :grade
   attr_reader :id
 
-  def initialize(id=nil, name, grade)
+  def initialize(name, grade, id=nil)
     @id = id
     @name = name
     @grade = grade
@@ -44,7 +44,7 @@ class Student
     end
   end
 
-  def self.create(name:, grade:)
+  def self.create(name, grade)
     student = Student.new(name, grade)
     student.save
     student
@@ -52,7 +52,7 @@ class Student
 
   def self.new_from_db(row)
     # create a new Student object given a row from the database
-    new_student = self.new
+    new_student = self.new(row[1], row[2], row[0])
     new_student.id = row[0]
     new_student.name = row[1]
     new_student.grade = row[2]
@@ -75,7 +75,7 @@ class Student
   end
 
   def update
-    sql = "UPDATE stduents SET name = ?, album = ? WHERE id = ?"
+    sql = "UPDATE students SET name = ?, grade = ? WHERE id = ?"
     DB[:conn].execute(sql, self.name, self.grade, self.id)
   end
 end
